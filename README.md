@@ -56,20 +56,21 @@ This allows sensor data to be interpreted visually by a CNN-based classifier.
 
 ## 🏗️ System Architecture
 
+```text
 Pressure Sensor Data
-↓
+        ↓
 Heatmap Conversion
-↓
+        ↓
 YOLO Classification Model (ONNX)
-↓
+        ↓
 FastAPI REST API
-↓
+        ↓
 Docker Container
-↓
+        ↓
 AWS EC2 (Free Tier)
-↓
+        ↓
 Public HTTP Endpoint
-
+```
 
 ---
 
@@ -77,22 +78,35 @@ Public HTTP Endpoint
 
 ### ✅ Health Check
 
+```
 GET /health
+```
 
-
-**Response:**
+Response:
 
 ```json
 {
   "status": "ok"
 }
-🔮 Predict
+```
+
+---
+
+### 🔮 Predict
+
+```
 POST /predict
+```
+
 Upload image file:
 
+```bash
 curl -F "file=@test.jpg" http://<SERVER_IP>/predict
+```
+
 Response:
 
+```json
 {
   "top1": {
     "class_id": 0,
@@ -101,26 +115,44 @@ Response:
   },
   "top5": [...]
 }
-🐳 Docker Deployment
-Build Locally
+```
+
+---
+
+## 🐳 Docker Deployment
+
+### Build Locally
+
+```bash
 docker build -t popu-yolo-api .
-Run Locally
+```
+
+### Run Locally
+
+```bash
 docker run -p 8080:8080 popu-yolo-api
+```
+
 Access locally:
 
+```
 http://localhost:8080/health
-☁️ AWS Deployment (Free Tier)
+```
+
+---
+
+## ☁️ AWS Deployment (Free Tier)
+
 Deployed using:
 
-EC2 (t2.micro – Free Tier)
+- EC2 (t2.micro – Free Tier)
+- Ubuntu 24.04
+- Docker
+- AWS ECR
 
-Ubuntu 24.04
+### Architecture
 
-Docker
-
-AWS ECR
-
-Architecture
+```text
 Internet
    ↓
 EC2 Instance (Free Tier)
@@ -128,34 +160,40 @@ EC2 Instance (Free Tier)
 Docker Container
    ↓
 YOLO API
+```
+
 Public API Example:
 
+```
 http://<PUBLIC_IP>/health
-💰 Cost Optimization Strategy
-Uses EC2 Free Tier (750 hours/month)
+```
 
-No Load Balancer
+---
 
-No ECS/Fargate
+## 💰 Cost Optimization Strategy
 
-No GPU
+- Uses EC2 Free Tier (750 hours/month)
+- No Load Balancer
+- No ECS/Fargate
+- No GPU
+- 30GB EBS (within Free Tier limits)
+- Container runs directly on EC2
 
-30GB EBS (within Free Tier limits)
+---
 
-Container runs directly on EC2
+## 🔒 Security Notes
 
-🔒 Security Notes
-AWS credentials are NOT included
+- AWS credentials are NOT included
+- PEM key files are excluded via `.gitignore`
+- Model weights are excluded
+- IAM user with programmatic access used for deployment
+- Security group restricts SSH to personal IP
 
-PEM key files are excluded via .gitignore
+---
 
-Model weights are excluded
+## 📂 Project Structure
 
-IAM user with programmatic access used for deployment
-
-Security group restricts SSH to personal IP
-
-📂 Project Structure
+```text
 yolo-popu-api/
 │
 ├── app/
@@ -165,57 +203,54 @@ yolo-popu-api/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
-🛠️ Technologies Used
-Python
+```
 
-Ultralytics YOLO
+---
 
-ONNX Runtime
+## 🛠️ Technologies Used
 
-FastAPI
+- Python
+- Ultralytics YOLO
+- ONNX Runtime
+- FastAPI
+- Docker
+- AWS EC2
+- AWS ECR
+- Linux (Ubuntu)
 
-Docker
+---
 
-AWS EC2
+## 📈 What This Project Demonstrates
 
-AWS ECR
+- ML model training & export
+- Data preprocessing & visualization
+- REST API development
+- Docker containerization
+- Cloud deployment (AWS)
+- DevOps fundamentals
+- Cost-aware cloud architecture
+- Public ML inference serving
 
-Linux (Ubuntu)
+---
 
-📈 What This Project Demonstrates
-ML model training & export
+## 🚀 Future Improvements
 
-Data preprocessing & visualization
+- HTTPS with SSL (Let's Encrypt)
+- Authentication layer (API key)
+- Batch inference endpoint
+- CI/CD pipeline (GitHub Actions)
+- Monitoring & logging
+- Docker image size optimization
+- Move to serverless architecture
+- Domain name integration
 
-REST API development
+---
 
-Docker containerization
+## 👨‍💻 Author
 
-Cloud deployment (AWS)
+**Sagar**  
+Machine Learning & Cloud Deployment Practice Project  
 
-DevOps fundamentals
+---
 
-Cost-aware cloud architecture
-
-Public ML inference serving
-
-🚀 Future Improvements
-HTTPS with SSL (Let's Encrypt)
-
-Authentication layer (API key)
-
-Batch inference endpoint
-
-CI/CD pipeline (GitHub Actions)
-
-Monitoring & logging
-
-Docker image size optimization
-
-Move to serverless architecture
-
-Domain name integration
-
-👨‍💻 Author
-Sagar
-Machine Learning & Cloud Deployment Practice Project
+⭐ If you found this project interesting, feel free to fork or contribute.
