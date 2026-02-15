@@ -1,0 +1,19 @@
+# Ignore model weights
+best.onnx
+best.pt
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+myenv1/
+
+# AWS
+.aws/
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
