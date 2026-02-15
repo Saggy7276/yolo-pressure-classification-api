@@ -10,7 +10,7 @@ This project implements a complete end-to-end machine learning pipeline for **pr
 ### The system:
 
 - Converts 12×6 pressure sensor grid data (72 values) into heatmap images
-- Trains a YOLO classification model
+- Trains a YOLO 26 classification model
 - Exports the model to ONNX
 - Wraps inference inside a FastAPI REST API
 - Containerizes the service using Docker
