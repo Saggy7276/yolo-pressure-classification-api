@@ -1,11 +1,12 @@
-🚀 YOLO Pressure Classification API (Docker + AWS Deployment)
+🚀 YOLO Pressure Classification API
+Dockerized ML Inference + AWS EC2 Deployment
 📌 Project Overview
 
-This project implements a complete end-to-end machine learning pipeline for pressure-based body position classification using YOLO (Ultralytics) and ONNX.
+This project implements a complete end-to-end machine learning pipeline for pressure-based body position classification using Ultralytics YOLO (classification) and ONNX Runtime.
 
 The system:
 
-Converts 12x6 pressure sensor grid data (72 values) into heatmap images
+Converts 12×6 pressure sensor grid data (72 values) into heatmap images
 
 Trains a YOLO classification model
 
@@ -15,9 +16,9 @@ Wraps inference inside a FastAPI REST API
 
 Containerizes the service using Docker
 
-Deploys it on AWS EC2 (Free Tier)
+Deploys the service on AWS EC2 (Free Tier)
 
-Serves predictions publicly via HTTP
+Serves real-time predictions via HTTP
 
 🧠 Problem Statement
 
@@ -32,56 +33,63 @@ prone
 supine
 
 📊 Data Processing Pipeline
-1️⃣ Pressure Grid → Heatmap
+🔄 Pressure Grid → Heatmap
 
 Input: 72 pressure values
 
-Reshaped into 12x6 grid
+Reshape into 12×6 grid
 
-Normalized (0–255)
+Normalize values to range 0–255
 
-Converted to heatmap using OpenCV colormap
+Convert to heatmap using OpenCV colormap
 
-Resized to 512×512 for YOLO
+Resize to 512×512 for YOLO
+
+This allows sensor data to be interpreted visually by a CNN-based classifier.
 
 🤖 Model
 
-Model: YOLO Classification (Ultralytics)
+Model Type: YOLO Classification (Ultralytics)
 
-Exported to: ONNX
+Export Format: ONNX
 
 Task: classify
 
-Deployment: CPU inference
+Inference: CPU-based
 
-🏗️ API Architecture
+Deployment Runtime: ONNX Runtime
 
-Built using:
+🏗️ System Architecture
+Pressure Sensor Data
+        ↓
+Heatmap Conversion
+        ↓
+YOLO Classification Model (ONNX)
+        ↓
+FastAPI REST API
+        ↓
+Docker Container
+        ↓
+AWS EC2 (Free Tier)
+        ↓
+Public HTTP Endpoint
 
-FastAPI
-
-Uvicorn
-
-ONNX Runtime
-
-Docker
-
-Endpoints
-Health Check
+🔌 API Endpoints
+✅ Health Check
 GET /health
 
 
 Response:
 
-{"status":"ok"}
+{
+  "status": "ok"
+}
 
-Predict
+🔮 Predict
 POST /predict
 
 
 Upload image file:
-
-Example:
 
 curl -F "file=@test.jpg" http://<SERVER_IP>/predict
 
@@ -98,17 +106,22 @@ Response:
 }
 
 🐳 Docker Deployment
-
-Build locally:
-
+Build Locally
 docker build -t popu-yolo-api .
+
+Run Locally
 docker run -p 8080:8080 popu-yolo-api
+
+
+Access locally:
+
+http://localhost:8080/health
 
 ☁️ AWS Deployment (Free Tier)
 
 Deployed using:
 
-EC2 (t2.micro)
+EC2 (t2.micro – Free Tier)
 
 Ubuntu 24.04
 
@@ -116,8 +129,7 @@ Docker
 
 AWS ECR
 
-Architecture:
-
+Architecture
 Internet
    ↓
 EC2 Instance (Free Tier)
@@ -131,25 +143,31 @@ Public API Example:
 
 http://<PUBLIC_IP>/health
 
-💰 Cost Optimization
+💰 Cost Optimization Strategy
 
-Uses EC2 Free Tier (750 hrs/month)
+Uses EC2 Free Tier (750 hours/month)
 
 No Load Balancer
 
-No Fargate
+No ECS/Fargate
 
 No GPU
 
-30GB EBS (within free limits)
+30GB EBS (within Free Tier limits)
+
+Container runs directly on EC2
 
 🔒 Security Notes
 
 AWS credentials are NOT included
 
-PEM keys are NOT stored in repository
+PEM key files are excluded via .gitignore
 
-.gitignore prevents sensitive files
+Model weights are excluded
+
+IAM user with programmatic access used for deployment
+
+Security group restricts SSH to personal IP
 
 📂 Project Structure
 yolo-popu-api/
@@ -168,7 +186,7 @@ Python
 
 Ultralytics YOLO
 
-ONNX
+ONNX Runtime
 
 FastAPI
 
@@ -180,62 +198,63 @@ AWS ECR
 
 Linux (Ubuntu)
 
-📈 What This Demonstrates
+📈 What This Project Demonstrates
 
-This project demonstrates:
+ML model training & export
 
-ML model training
+Data preprocessing & visualization
 
-Data preprocessing
-
-Model export
-
-API development
+REST API development
 
 Docker containerization
 
-Cloud deployment
+Cloud deployment (AWS)
 
-AWS networking & security
+DevOps fundamentals
 
 Cost-aware cloud architecture
 
+Public ML inference serving
+
 🚀 Future Improvements
 
-Add HTTPS (SSL)
+HTTPS with SSL (Let's Encrypt)
 
-Add authentication
+Authentication layer (API key)
 
-Add batch inference endpoint
+Batch inference endpoint
 
-Use CI/CD pipeline
+CI/CD pipeline (GitHub Actions)
 
-Add monitoring
+Monitoring & logging
 
-Optimize Docker image size
+Docker image size optimization
 
-Switch to serverless deployment
+Move to serverless architecture
+
+Domain name integration
 
 👨‍💻 Author
 
 Sagar
 Machine Learning & Cloud Deployment Practice Project
 
-⭐ If you found this interesting, feel free to fork or contribute.
-🔥 Optional Upgrade
+⭐ If you found this project interesting, feel free to fork or contribute.
 
-If you want, I can also:
+🚀 If You Want Next-Level Polish
 
-Make this README look more research-oriented
+I can help you:
 
-Make it resume-ready
+Add professional badges (Docker, AWS, Python, YOLO)
 
-Add architecture diagrams
+Add architecture diagram image
 
-Add badges (Docker, AWS, Python, YOLO)
+Make it recruiter-ready
 
-Add screenshots section
+Optimize README for ML engineer roles
 
-Make it enterprise-grade documentation
+Write a LinkedIn post about this deployment
 
-Just tell me 👍
+Turn this into a resume bullet
+
+Tell me what you want next 👌
